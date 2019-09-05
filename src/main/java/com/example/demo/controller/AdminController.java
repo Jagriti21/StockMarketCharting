@@ -111,8 +111,16 @@ public class AdminController
 		System.out.println("Mubarka");
 		//Checking the extensions of file for.xlsx)
 		if (fileAddress.getOriginalFilename().endsWith(".xlsx")) {
+			System.out.println("inside");
 			XSSFWorkbook workbook = new XSSFWorkbook(fileAddress.getInputStream());
-			XSSFSheet worksheet = workbook.getSheetAt(0);
+			System.out.println("inside1");
+			
+		
+			try {
+				XSSFSheet worksheet = workbook.getSheetAt(0);
+			
+			
+			System.out.println("inside2");
 			//Checking the column names(companycode,StockExchange,currentprice,date,time are allowed respectively) 
 			if(!checkFormat(worksheet.getRow(0),null,1)) {
 				System.out.println("Worksheet not correct");
@@ -133,10 +141,15 @@ public class AdminController
 			}
 			//Closing the workbook stream
 			workbook.close();
-
+			}
+			catch (NullPointerException e)
+			{
+			return new	ModelAndView("fail");
+			}
 		} else if (fileAddress.getOriginalFilename().endsWith(".xls")				//Checking the extensions of file for.xlsx)
 				&& !fileAddress.getOriginalFilename().endsWith(".xlsx")) {
 			HSSFWorkbook workbook = new HSSFWorkbook(fileAddress.getInputStream());
+			try {
 			HSSFSheet worksheet = workbook.getSheetAt(0);
 
 			//Checking the column names(companycode,StockExchange,currentprice,date,time are allowed respectively) 
@@ -158,6 +171,11 @@ public class AdminController
 			}
 			//Closing the workbook stream
 			workbook.close();
+			}
+			catch (NullPointerException e)
+			{
+			return new	ModelAndView("fail");
+			}
 		}
 
   System.out.println(minDate+" ******* "+maxDate+"********"+noOfRecords);
